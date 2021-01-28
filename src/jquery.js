@@ -12,7 +12,6 @@ window.jQuery = function(selectorOrArray){
     //对象一般用instanceof
     //api 可以操作elements
     return {
-        oldApi: selectorOrArray.oldApi,//oldApi来获取数组的api。(api操作数组，又挂到了数组上，要获取数组上的oldApi)
 
         //find 一个test
         // find(selector){
@@ -55,9 +54,48 @@ window.jQuery = function(selectorOrArray){
                   //总结一句话就是，jQuery你给我传什么，我就会返回一个对象操作什么。
         },
 
-        end(){
-            return this.oldApi //this 就是当前的api//api2   api2的旧api是api1。调end用新api调的
+       
+        //each遍历当前的所有元素
+        each(fn){
+            for(let i = 0;i<elements.length;i++){
+                 //elements是个闭包会一直在第二行，不会丢失
+                fn.call(null, elements[i], i)
+                 //call来调用，this传空，给元素下标知道是第几个
+            }
+            return this//this就是api对象，当前api
+           
         },
+
+
+
+        //实现parent
+        //parent不需要参数，直接什么什么.parent
+        parent(){
+            //获取对应元素的爸爸
+            const array = []
+            this.each((node)=>{//每一个元素我们要得到一个节点
+                if(array.indexOf(node.parentNode) === -1){//push的时候判断一下，不在里面就是等于-1
+                    array.push(node.parentNode)//把这个节点的爸爸放到数组里 
+                }
+            })
+            return jQuery(array)
+            //封装一个操纵数组的对象，jQuery会返回一个对象，这个对象会操作这些爸爸
+        },
+        children(){
+            const array = []//准备好一个数组
+            this.each((node)=>{
+                array.push(...node.children)//...是把里面的东西拆开，第一个元素当做第一个参数，第二个元素当做第二个参数。
+                                              //等价于(node.children[0], node.children[1],node.children[2]...等等)
+            })//遍历刚才的元素，
+            return jQuery(array)
+        },
+
+
+        print(){
+            console.log(elements)
+        },
+
+
 
 
         //闭包：函数访问外部的变量
@@ -68,8 +106,14 @@ window.jQuery = function(selectorOrArray){
             }
             return this
         },
-       
 
+
+
+        //实现end
+        oldApi: selectorOrArray.oldApi,//oldApi来获取数组的api。(api操作数组，又挂到了数组上，要获取数组上的oldApi)
+        end(){
+            return this.oldApi //this 就是当前的api//api2   api2的旧api是api1。调end用新api调的
+        },
 
 
 

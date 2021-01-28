@@ -35,20 +35,40 @@
 
 
 //简化后：
-jQuery('.test')
-  .find('.child') 
-  .addClass('red')
-  .addClass('blue')
-  .addClass('green')
+// jQuery('.test')
+//   .find('.child') 
+//   .addClass('red')
+//   .addClass('blue')
+//   .addClass('green')
 //我们先找到.test，然后在找到里面所有的child，然后在child上面加个red，还可以加其他的
 
 
 //操作.child后又想返回.test，在test身上加：
 //方法一：加个变量
-  .end()//当前child结束了，只有end就回去上一层的api
-  .addClass('yellow')//此时yellow在test上
+//   .end()//当前child结束了，只有end就回去上一层的api
+//   .addClass('yellow')//此时yellow在test上
 
 //   //中间命个名
 //   const api1 = jQuery('.test')
 //   const api2 = api1.find('.child') .addClass('red') .addClass('blue') .addClass('green')
 //   const oldApi = api2.end() .addClass('yellow')
+
+
+//遍历每个元素
+// const x =jQuery('.test')
+//   .find('.child')
+
+// x.each((div) => console.log(div))
+//each接收一个函数，然后在某个时刻会调用这个函数，调用的时候会传一个elements[i]和一个i，你可以在你的参数里接收这个elements[i]和i
+
+
+//爸爸
+// const x =jQuery('.test')
+
+// x.parent().print()
+//直接用获取到的api去print一下，它就会操作这些爸爸
+
+const x =jQuery('.test')
+
+x.children().print()
+//获取children并打印出来

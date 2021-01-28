@@ -118,6 +118,18 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"jquery.js":[function(require,module,exports) {
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 window.jQuery = function (selectorOrArray) {
   var elements; //const声明了必须赋值，这里用let
   //先声明一个值为空，然后根据你的选择器是string还是Array，分别赋予不同的值
@@ -132,8 +144,6 @@ window.jQuery = function (selectorOrArray) {
 
 
   return {
-    oldApi: selectorOrArray.oldApi,
-    //oldApi来获取数组的api。(api操作数组，又挂到了数组上，要获取数组上的oldApi)
     //find 一个test
     // find(selector){
     // //find是一个函数缩写，它可以接受一个选择器。
@@ -172,8 +182,41 @@ window.jQuery = function (selectorOrArray) {
       //  return jQuery(array)//实际上我要得到一个新的api对象，这个新的api对象用来操作array。
       //总结一句话就是，jQuery你给我传什么，我就会返回一个对象操作什么。
     },
-    end: function end() {
-      return this.oldApi; //this 就是当前的api//api2   api2的旧api是api1。调end用新api调的
+    //each遍历当前的所有元素
+    each: function each(fn) {
+      for (var i = 0; i < elements.length; i++) {
+        //elements是个闭包会一直在第二行，不会丢失
+        fn.call(null, elements[i], i); //call来调用，this传空，给元素下标知道是第几个
+      }
+
+      return this; //this就是api对象，当前api
+    },
+    //实现parent
+    //parent不需要参数，直接什么什么.parent
+    parent: function parent() {
+      //获取对应元素的爸爸
+      var array = [];
+      this.each(function (node) {
+        //每一个元素我们要得到一个节点
+        if (array.indexOf(node.parentNode) === -1) {
+          //push的时候判断一下，不在里面就是等于-1
+          array.push(node.parentNode); //把这个节点的爸爸放到数组里 
+        }
+      });
+      return jQuery(array); //封装一个操纵数组的对象，jQuery会返回一个对象，这个对象会操作这些爸爸
+    },
+    children: function children() {
+      var array = []; //准备好一个数组
+
+      this.each(function (node) {
+        array.push.apply(array, _toConsumableArray(node.children)); //...是把里面的东西拆开，第一个元素当做第一个参数，第二个元素当做第二个参数。
+        //等价于(node.children[0], node.children[1],node.children[2]...等等)
+      }); //遍历刚才的元素，
+
+      return jQuery(array);
+    },
+    print: function print() {
+      console.log(elements);
     },
     //闭包：函数访问外部的变量
     addClass: function addClass(className) {
@@ -183,6 +226,12 @@ window.jQuery = function (selectorOrArray) {
       }
 
       return this;
+    },
+    //实现end
+    oldApi: selectorOrArray.oldApi,
+    //oldApi来获取数组的api。(api操作数组，又挂到了数组上，要获取数组上的oldApi)
+    end: function end() {
+      return this.oldApi; //this 就是当前的api//api2   api2的旧api是api1。调end用新api调的
     }
   };
 };
