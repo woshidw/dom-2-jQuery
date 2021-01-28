@@ -36,15 +36,19 @@
 
 //简化后：
 jQuery('.test')
-  .find('.child')
+  .find('.child') 
   .addClass('red')
   .addClass('blue')
   .addClass('green')
 //我们先找到.test，然后在找到里面所有的child，然后在child上面加个red，还可以加其他的
 
 
-
-
-
 //操作.child后又想返回.test，在test身上加：
 //方法一：加个变量
+  .end()//当前child结束了，只有end就回去上一层的api
+  .addClass('yellow')//此时yellow在test上
+
+//   //中间命个名
+//   const api1 = jQuery('.test')
+//   const api2 = api1.find('.child') .addClass('red') .addClass('blue') .addClass('green')
+//   const oldApi = api2.end() .addClass('yellow')

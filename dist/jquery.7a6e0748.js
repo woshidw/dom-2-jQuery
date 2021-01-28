@@ -132,6 +132,8 @@ window.jQuery = function (selectorOrArray) {
 
 
   return {
+    oldApi: selectorOrArray.oldApi,
+    //oldApi来获取数组的api。(api操作数组，又挂到了数组上，要获取数组上的oldApi)
     //find 一个test
     // find(selector){
     // //find是一个函数缩写，它可以接受一个选择器。
@@ -155,9 +157,11 @@ window.jQuery = function (selectorOrArray) {
       for (var i = 0; i < elements.length; i++) {
         var elements2 = Array.from(elements[i].querySelectorAll(selector));
         array = array.concat(elements2); //多个test//首先遍历这个elements，然后做一个中间的变量elements2
-      } //return一个新的api,因为return一个数组的话他不是一个函数无法调用
-      //所以selectorOrArray
+      }
 
+      array.oldApi = this; //this就是 api，旧的api//放到了数组身上，api也有oldApi
+      //return一个新的api,因为return一个数组的话他不是一个函数无法调用
+      //所以selectorOrArray
 
       var newApi = jQuery(array); //给我一个数组我给你返回一个新的api，如果直接用同一个api，那么每次得到新的元素都会污染之前的api，所有一定要得到一个新的对象，这个新对象就叫newApi
 
@@ -167,6 +171,9 @@ window.jQuery = function (selectorOrArray) {
       //简写 
       //  return jQuery(array)//实际上我要得到一个新的api对象，这个新的api对象用来操作array。
       //总结一句话就是，jQuery你给我传什么，我就会返回一个对象操作什么。
+    },
+    end: function end() {
+      return this.oldApi; //this 就是当前的api//api2   api2的旧api是api1。调end用新api调的
     },
     //闭包：函数访问外部的变量
     addClass: function addClass(className) {
