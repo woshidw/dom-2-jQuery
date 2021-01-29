@@ -1,4 +1,4 @@
-window.jQuery = function(selectorOrArray){
+window.$ = window.jQuery = function(selectorOrArray){//等号赋值从右忘左执行，也可以在最后写成window.$ = window.jQuery
     let elements
     //const声明了必须赋值，这里用let
       //先声明一个值为空，然后根据你的选择器是string还是Array，分别赋予不同的值
@@ -119,3 +119,4 @@ window.jQuery = function(selectorOrArray){
 
     }
 }
+

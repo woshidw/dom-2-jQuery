@@ -72,3 +72,22 @@ const x =jQuery('.test')
 
 x.children().print()
 //获取children并打印出来
+
+
+
+
+
+//命名风格
+// const div1 = document.querySelector('.test') //找到第一个以类名为test的div
+//如果是普通的div元素，用el开头或者直接叫div
+
+// const $div2 = $('.test') //div2获取的就是操作对应div的一个api，其实不是div
+//但是如果是jQuery产生的一个api对象，那么要用jQuery的$开头
+
+//疑问？
+  //div2 到底是 DOM对象 还是 JQuery对象
+  //DOM 对象只能使用DOM API 比如 querySelector appendChild
+  //jQuery 对象只能使用jQuery 的API 比如 find each
+  
+
+  
