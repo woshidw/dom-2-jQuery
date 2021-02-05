@@ -64,7 +64,6 @@
 
 //爸爸
 // const x =jQuery('.test')
-
 // x.parent().print()
 //直接用获取到的api去print一下，它就会操作这些爸爸
 
